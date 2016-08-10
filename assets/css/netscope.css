@@ -167,3 +167,32 @@ h1, h2, h3 {
     margin-top:10px;
     border-top: 1px dotted #52637D;
 }
+
+#net-header {
+  position: relative;
+}
+
+#copy-to-clipboard {
+  position: absolute;
+  right: 20px;
+  top: 22px;
+  color: #965237;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#copy-to-clipboard:hover {
+  color: #ca5237;
+}
+
+#js-copytextarea {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  z-index: -100;
+}

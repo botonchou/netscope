@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="assets/css/tooltip.css">
     <link rel="stylesheet" href="assets/css/codemirror.css">
     <link rel="stylesheet" href="assets/css/netscope.css">
+    <link rel="stylesheet" href="assets/css/icono.min.css">
     <script src="assets/js/lib/lodash.min.js"></script>
     <script src="assets/js/lib/jquery.min.js"></script>
     <script src="assets/js/lib/jquery.qtip.min.js"></script>
@@ -27,7 +28,11 @@
         </div>
         <div id="net-container">
             <div id="net-group">
-                <h1 id="net-title"></h1>
+		<div id="net-header">
+		    <h1 id="net-title"></h1>
+		    <i id="copy-to-clipboard" class="icono-document" title="Copy To Clipboard"></i>
+		    <textarea id='js-copytextarea'></textarea>
+		</div>
                 <svg id="net-svg"></svg>
             </div>
         </div>

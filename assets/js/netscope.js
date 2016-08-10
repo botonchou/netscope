@@ -1906,6 +1906,19 @@ module.exports = Editor = (function() {
     $editorBox.width(editorWidthPercentage + '%');
     $('#net-column').width((100 - editorWidthPercentage) + '%');
     $('#master-container').prepend($editorBox);
+    $('#copy-to-clipboard').on('click', function (e) {
+
+      $('#js-copytextarea').get()[0].select();
+
+      try {
+	var successful = document.execCommand('copy');
+	var msg = successful ? 'successful' : 'unsuccessful';
+	console.log('Copying text command was ' + msg);
+      } catch (err) {
+	console.log('Oops, unable to copy. Err: ', err);
+      }
+    });
+
     this.editor = CodeMirror($editorBox[0], {
       value: '# Enter your network definition here.\n# Use Shift+Enter to update the visualization.',
       lineNumbers: true,
@@ -1916,12 +1929,46 @@ module.exports = Editor = (function() {
         return _this.onKeyDown(e);
       };
     })(this));
+    this.editor.on('load', (function(_this) {
+      _this.onLoad();
+    })(this));
+  }
+
+  function encode(raw_str) {
+    return window.btoa(unescape(encodeURIComponent(raw_str)));
+  }
+
+  function decode(b64_str) {
+    return decodeURIComponent(escape(window.atob(b64_str)));
   }
 
   Editor.prototype.onKeyDown = function(e) {
     if (e.shiftKey && e.keyCode === 13) {
       e.preventDefault();
-      return this.loader(this.editor.getValue());
+      prototxt = this.editor.getValue();
+      encoded_prototxt = encode(prototxt)
+      document.location.hash = '#/editor' + '?prototxt=' + encoded_prototxt
+      $('#js-copytextarea').text(document.location.href);
+      return this.loader(prototxt);
+    }
+  };
+
+  Editor.prototype.onLoad = function(e) {
+    $('#js-copytextarea').text(document.location.href);
+
+    function getQueryParams(qs) {
+      qs = qs.split('+').join(' ');
+      var params = {}, tokens, re = /[?&]?([^=]+)=([^&]*)/g;
+      while (tokens = re.exec(qs))
+	params[decodeURIComponent(tokens[1])] = tokens[2];
+      return params;
+    }
+
+    hash = document.location.hash;
+    if (hash.indexOf("prototxt") != -1) {
+      prototxt = decode(hash.split('=')[1]);
+      this.editor.setValue(prototxt)
+      this.loader(prototxt);
     }
   };
 
